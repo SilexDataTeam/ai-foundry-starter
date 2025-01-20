@@ -76,4 +76,4 @@ Please report any issues with this project via a GitHub issue. An issue can also
 
 ## Feedback
 
-All feedback is appreciated - if you prefer, you may contact us via email at [ai-foundry@silexdata.com](mailto:ai-foundry@silexdata.com)
+All feedback is appreciated - if you prefer, you may contact us via email at [ai-foundry@silexdata.com](mailto:ai-foundry@silexdata.com).

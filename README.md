@@ -4,7 +4,7 @@
 
 # Silex AI Foundry Starter
 
-This project project is a starter kit for building and deploying AI applications powered by LangChain/LangGraph — complete with streaming chat, robust authentication, a Kong-based multi-model gateway, and modern cloud-native infrastructure easily deployable on Red Hat OpenShift.
+This project is a starter kit for building and deploying AI applications powered by LangChain/LangGraph — complete with streaming chat, robust authentication, a Kong-based multi-model gateway, and modern cloud-native infrastructure easily deployable on Red Hat OpenShift.
 
 ---
 

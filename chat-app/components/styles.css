@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --primary: #1f2937;
+    --primary-dark: #111827;
+    --secondary: #f9fafb;
+    --accent: #0ea5e9;
+    --accent-dark: #0284c7;
+    --text-dark: #111827;
+    --text-light: #6b7280;
+    --font-sans: 'Inter', sans-serif;
+}
+
+body {
+    font-family: var(--font-sans);
+    background-color: var(--secondary);
+    color: var(--text-dark);
+}
+
+.chat-bubble-ai {
+    background-color: #f3f4f6;
+    color: var(--text-dark);
+    border-radius: 12px; /* Rounded corners */
+}
+
+.chat-bubble-human {
+    background-color: var(--primary);
+    color: white;
+    border-radius: 12px; /* Rounded corners */
+}
+
+
+/* Responsive adjustments (Optional) */
+@media (max-width: 768px) {
+    .chat-area {
+        padding: 1rem;
+    }
+}

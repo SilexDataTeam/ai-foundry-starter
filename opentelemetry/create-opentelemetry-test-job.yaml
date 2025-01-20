@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: telemetrygen
+  namespace: tempo-test
+  labels:
+    app: telmeetrygen
+spec:
+  ttlSecondsAfterFinished: 30
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: telemetrygen
+        image: ghcr.io/open-telemetry/opentelemetry-collector-contrib/telemetrygen:latest
+        args: [traces, --otlp-endpoint=dev-collector:4317, --otlp-insecure, --duration=240s, --rate=4]

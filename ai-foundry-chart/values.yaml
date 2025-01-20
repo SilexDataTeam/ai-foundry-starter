@@ -1,0 +1,144 @@
+# This file contains the default values for the AI Foundry Helm chart
+
+# Frontend hostname for the AI Foundry Chat App
+frontend_hostname: ""
+
+# Backend hostname for the backend service
+backend_hostname: "" 
+
+# Default namespace for AI Foundry
+namespace: ai-foundry
+keycloak:
+  # Enable Keycloak
+  enabled: true
+  # Install Red Hat build of Keycloak operator
+  operator-install: true
+  hostname: ""
+  # Keycloak instance and other resources must be created in operator namespace
+  namespace: keycloak-operator
+  # Keycloak realm
+  realm: myrealm
+
+# Image configuration
+image:
+  default_pull_policy: IfNotPresent
+  backend:
+    repository: ghcr.io/silexdatateam/ai-foundry-starter/ai-foundry-backend
+    tag: main
+  frontend:
+    repository: ghcr.io/silexdatateam/ai-foundry-starter/ai-foundry-chat-app
+    tag: main
+  ingestion:
+    repository: ghcr.io/silexdatateam/ai-foundry-starter/ai-foundry-ingestion
+    tag: main
+
+keycloak_client_id: ai-foundry-chat-app
+openai_api_key: ""
+model_id: gpt-4o-mini
+disable_telemetry: true
+disable_tls_verify: true
+use_chain: advanced_rag_qa # invoice_agent, advanced_rag_qa, basic_rag_qa
+embedding_model_id: text-embedding-3-small
+collection_name: ""
+
+
+backend:
+  min_scale: 5
+frontend:
+  min_scale: 5
+
+# Create Tempo monolithic instance w/ PV-backed persistence (must have Tempo Operator installed)
+tempo:
+  enabled: true
+
+# Create OpenTelemetry Collector instance (must have Red Hat build of OpenTelemetry Operator installed)
+otel:
+  enabled: true
+  # By default we create a service w/ name tempo-ai-foundry-tempo in the same namespace
+  collector_hostname: "tempo-ai-foundry-tempo"
+  collector_port: 4317
+  insecure: true
+
+# Turn on/off subchart as needed
+kong:
+  enabled: true
+  namespace: ai-foundry
+
+  image:
+    repository: kong/kong-gateway
+    tag: "3.8.0.0"
+
+  env:
+    database: "off"
+
+  secretVolumes: []
+  cluster:
+    enabled: false
+  clustertelemetry:
+    enabled: false
+
+  admin:
+    enabled: true
+    http:
+      enabled: true
+    type: ClusterIP
+
+  proxy:
+    type: ClusterIP
+
+  manager:
+    type: ClusterIP
+
+  ingressController:
+    enabled: false
+    installCRDs: false
+
+  resources:
+    requests:
+      cpu: 1
+      memory: "2Gi"
+
+  dblessConfig:
+    config: |-
+      _format_version: "3.0"
+
+      plugins:
+        - name: ai-proxy
+          enabled: true
+          protocols:
+            - http
+            - https
+          service: openai_service
+          config:
+            auth:
+              allow_override: false
+            logging:
+              log_payloads: true
+              log_statistics: true
+            max_request_body_size: 1048576
+            model:
+              name:
+              options:
+              provider: openai
+            model_name_header: true
+            response_streaming: allow
+            route_type: llm/v1/chat
+
+      services:
+        - name: openai_service
+          enabled: true
+          host: localhost
+          port: 30000
+          protocol: http
+          connect_timeout: 60000
+          read_timeout: 60000
+          retries: 5
+          routes:
+            - name: openai_route
+              paths:
+                - /openai
+              protocols:
+                - http
+                - https
+              strip_path: true
+              preserve_host: false

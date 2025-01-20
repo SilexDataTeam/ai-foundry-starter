@@ -1,0 +1,47 @@
+{{- if .Values.keycloak.enabled }}
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: keycloak-db
+  namespace: {{ .Values.keycloak.namespace }}
+spec:
+  description: "Keycloak PostgreSQL Cluster"
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.2
+  enableSuperuserAccess: true
+  instances: 1
+  startDelay: 300
+  primaryUpdateStrategy: unsupervised
+  postgresql:
+    pg_hba:
+      - host all all 10.128.0.0/14 md5
+  bootstrap:
+    initdb:
+      database: keycloak
+  storage:
+    size: 2Gi
+  resources:
+    requests:
+      memory: "1Gi"
+    limits:
+      memory: "1Gi"
+  affinity:
+    enablePodAntiAffinity: true
+    tolerations:
+    - key: cnpg.io/cluster
+      effect: NoSchedule
+      value: keycloak-db
+      operator: Equal
+    additionalPodAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 1
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+            - key: app.component
+              operator: In
+              values:
+              - "pg-cluster"
+          topologyKey: topology.kubernetes.io/zone
+  monitoring:
+    enablePodMonitor: true
+{{- end }}

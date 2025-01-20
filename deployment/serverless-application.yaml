@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: serverless
+  namespace: openshift-gitops  # Argo CD's namespace
+spec:
+  project: default
+  source:
+    repoURL: 'git@github.com:silexdatateam/ai-foundry-starter.git'
+    targetRevision: HEAD
+    path: serverless/k8s
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: openshift-serverless  # The namespace to deploy into
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true  # Allows Argo CD to create the namespace

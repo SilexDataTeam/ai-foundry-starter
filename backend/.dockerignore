@@ -1,0 +1,18 @@
+# Ignore Python cache and compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+
+# Ignore the local virtual environment
+.venv/
+.env*
+
+# Possibly other large or unneeded files
+.git
+
+# Ignore the Dockerfile & .dockerignore files
+Dockerfile
+.dockerignore

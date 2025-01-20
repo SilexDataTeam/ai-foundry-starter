@@ -1,0 +1,98 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kong-config
+  namespace: ai-gateway
+data:
+  config.yaml: |
+    _format_version: "3.0"
+    plugins:
+      # Plugin for OpenAI
+      - config:
+          auth:
+            allow_override: false
+          logging:
+            log_payloads: true
+            log_statistics: true
+          max_request_body_size: 1048576
+          model:
+            name:
+            options:
+              max_tokens: 256
+              temperature: 0.7
+              top_p: 1.0
+            provider: openai
+          model_name_header: true
+          response_streaming: allow
+          route_type: llm/v1/chat
+        enabled: true
+        name: ai-proxy
+        protocols:
+          - http
+          - https
+        service: openai_service  # Tie plugin to OpenAI service
+
+      # Plugin for Ollama
+      - config:
+          auth:
+            allow_override: false
+          logging:
+            log_payloads: true
+            log_statistics: true
+          max_request_body_size: 1048576
+          model:
+            name:
+            options:
+              upstream_url: "http://192.168.1.79:11434/v1/chat/completions"  # Ollama backend endpoint
+              max_tokens: 512
+              temperature: 0.5
+              top_p: 0.9
+            provider: openai
+          model_name_header: true
+          response_streaming: allow
+          route_type: llm/v1/chat
+        enabled: true
+        name: ai-proxy
+        protocols:
+          - http
+          - https
+        service: ollama_service  # Tie plugin to Ollama service
+
+    services:
+      # OpenAI Service
+      - connect_timeout: 60000
+        enabled: true
+        host: localhost
+        name: openai_service
+        port: 30000
+        protocol: http
+        read_timeout: 60000
+        retries: 5
+        routes:
+          - name: openai_route
+            paths:
+              - /openai
+            protocols:
+              - http
+              - https
+            strip_path: true
+            preserve_host: false
+
+      # Ollama Service
+      - connect_timeout: 60000
+        enabled: true
+        host: localhost
+        name: ollama_service
+        port: 30001
+        protocol: http
+        read_timeout: 60000
+        retries: 5
+        routes:
+          - name: ollama_route
+            paths:
+              - /ollama
+            protocols:
+              - http
+              - https
+            strip_path: true
+            preserve_host: false

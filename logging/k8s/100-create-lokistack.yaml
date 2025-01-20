@@ -1,0 +1,24 @@
+apiVersion: loki.grafana.com/v1
+kind: LokiStack
+metadata:
+  name: logging-loki
+  namespace: openshift-logging
+spec:
+  tenants:
+    mode: openshift-logging
+  managementState: Managed
+  limits:
+    global:
+      queries:
+        queryTimeout: 3m
+  storage:
+    schemas:
+      - effectiveDate: '2020-10-11'
+        version: v13
+    secret:
+      name: logging-loki-gcs
+      type: gcs
+  hashRing:
+    type: memberlist
+  size: 1x.demo
+  storageClassName: lvms-vg1

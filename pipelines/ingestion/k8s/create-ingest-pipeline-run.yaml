@@ -1,0 +1,32 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: ingest-pipeline-run-manual
+  namespace: ai-foundry
+spec:
+  pipelineRef:
+    name: ingest-pipeline
+  serviceAccountName: pipeline
+  params:
+    - name: inputDirectory
+      value: ""
+    - name: s3Bucket
+      value: "dlewis-test-ingest-bucket"
+    - name: s3Prefix
+      value: ""
+    # - name: chunkSize
+    #   value: ""
+    # - name: chunkOverlap
+    #   value: ""
+    - name: collectionName
+      value: "my_collection"
+    - name: embeddingModelName
+      value: "text-embedding-3-small"
+    - name: recreateCollection
+      value: "true"
+    - name: convertToMarkdown
+      value: "true"
+    - name: disableChunking
+      value: "true"
+    - name: enableFullDocuments
+      value: "true"

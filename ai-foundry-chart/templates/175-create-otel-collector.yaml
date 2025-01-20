@@ -1,0 +1,62 @@
+{{- if .Values.otel.enabled }}
+apiVersion: opentelemetry.io/v1alpha1
+kind: OpenTelemetryCollector
+metadata:
+  name: ai-foundry-otel-collector
+  namespace: {{ .Values.namespace }}
+spec:
+  config: |
+    receivers:
+      otlp:
+        protocols:
+          grpc: {}
+          http: {}
+      jaeger:
+        protocols:
+          thrift_binary: {}
+          thrift_compact: {}
+          thrift_http: {}
+          grpc: {}
+
+    processors: {}
+
+    exporters:
+      otlp:
+        endpoint: {{ .Values.otel.collector_hostname }}:{{ .Values.otel.collector_port }}
+        tls:
+          insecure: true
+        
+
+    service:
+      pipelines:
+        traces:
+          receivers: [otlp, jaeger]
+          exporters: [otlp]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: tempostack-traces-write
+rules:
+  - apiGroups:
+      - 'tempo.grafana.com'
+    resources:
+      - dev
+    resourceNames:
+      - traces
+    verbs:
+      - 'create'
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: tempostack-traces
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: tempostack-traces-write
+subjects:
+  - kind: ServiceAccount
+    name: dev-collector
+    namespace: {{ .Values.namespace }}
+{{- end}}

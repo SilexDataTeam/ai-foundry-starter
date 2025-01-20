@@ -1,0 +1,11 @@
+apiVersion: v2
+name: ai-foundry
+description: Helm chart for deploying AI Foundry
+type: application
+version: 0.1.0
+
+dependencies:
+  - name: kong
+    version: "2.43.0"
+    repository: "https://charts.konghq.com"
+    condition: kong.enabled

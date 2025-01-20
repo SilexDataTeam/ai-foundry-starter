@@ -1,0 +1,47 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: ai-foundry-pg-cluster
+  namespace: {{ .Values.namespace }}
+spec:
+  description: "AI Foundry PostgreSQL Cluster"
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.2
+  enableSuperuserAccess: true
+  instances: 1
+  startDelay: 300
+  primaryUpdateStrategy: unsupervised
+  postgresql:
+    pg_hba:
+      - host all all 10.128.0.0/14 md5
+  bootstrap:
+    initdb:
+      postInitTemplateSQL:
+        - CREATE EXTENSION IF NOT EXISTS vector;
+      database: app
+  storage:
+    size: 50Gi
+  resources:
+    requests:
+      memory: "1Gi"
+    limits:
+      memory: "1Gi"
+  affinity:
+    enablePodAntiAffinity: true
+    tolerations:
+    - key: cnpg.io/cluster
+      effect: NoSchedule
+      value: ai-foundry-pg-cluster
+      operator: Equal
+    additionalPodAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 1
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+            - key: app.component
+              operator: In
+              values:
+              - "pg-cluster"
+          topologyKey: topology.kubernetes.io/zone
+  monitoring:
+    enablePodMonitor: true

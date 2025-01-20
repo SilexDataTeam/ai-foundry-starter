@@ -1,0 +1,12 @@
+langchain==0.3.13
+langchain-community==0.3.13
+langchain-core==0.3.28
+langchain-openai==0.2.14
+langchain-text-splitters==0.3.4
+langchain-postgres==0.0.12
+pypdf==5.1.0
+boto3==1.35.90
+markitdown==0.0.1a3
+nltk==3.9.1
+unstructured[md]==0.16.11
+wikipedia==1.4.0

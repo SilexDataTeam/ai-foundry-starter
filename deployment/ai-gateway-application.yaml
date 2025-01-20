@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ai-gateway
+  namespace: openshift-gitops  # Argo CD's namespace
+spec:
+  project: default
+  sources:
+    - chart: kong
+      repoURL: https://charts.konghq.com
+      helm:
+        valueFiles:
+          - $values/model-gateway/values.yaml
+        parameters:
+          - name: "env.cluster_control_plane"
+            value: "${CLUSTER_SERVER_NAME}:443"
+          - name: "env.cluster_server_name"
+            value: "${CLUSTER_SERVER_NAME}"
+          - name: "env.cluster_telemetry_endpoint"
+            value: "${CLUSTER_TELEMETRY_SERVER_NAME}:443"
+          - name: "env.cluster_telemetry_server_name"
+            value: "${CLUSTER_TELEMETRY_SERVER_NAME}"
+      targetRevision: 2.43.0
+    - repoURL: 'git@github.com:silexdatateam/ai-foundry-starter.git'
+      targetRevision: HEAD
+      path: model-gateway
+      ref: values
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: ai-gateway  # The namespace to deploy into
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true  # Allows Argo CD to create the namespace

@@ -1,0 +1,68 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: ingest-pipeline
+  namespace: ai-foundry
+spec:
+  params:
+    - name: inputDirectory
+      type: string
+      default: ""
+    - name: s3Bucket
+      type: string
+      default: ""
+    - name: s3Prefix
+      type: string
+      default: ""
+    - name: chunkSize
+      type: string
+      default: "500"
+    - name: chunkOverlap
+      type: string
+      default: "100"
+    - name: collectionName
+      type: string
+      default: "my_collection"
+    - name: embeddingModelName
+      type: string
+      default: "text-embedding-3-small"
+    - name: recreateCollection
+      type: string
+      default: "false"
+    - name: convertToMarkdown
+      type: string
+      default: "false"
+    - name: disableChunking
+      type: string
+      default: "false"
+    - name: enableFullDocuments
+      type: string
+      default: "false"
+
+  tasks:
+    - name: run-ingest
+      taskRef:
+        name: ingest-task
+      params:
+        - name: inputDirectory
+          value: "$(params.inputDirectory)"
+        - name: s3Bucket
+          value: "$(params.s3Bucket)"
+        - name: s3Prefix
+          value: "$(params.s3Prefix)"
+        - name: chunkSize
+          value: "$(params.chunkSize)"
+        - name: chunkOverlap
+          value: "$(params.chunkOverlap)"
+        - name: collectionName
+          value: "$(params.collectionName)"
+        - name: embeddingModelName
+          value: "$(params.embeddingModelName)"
+        - name: recreateCollection
+          value: "$(params.recreateCollection)"
+        - name: convertToMarkdown
+          value: "$(params.convertToMarkdown)"
+        - name: disableChunking
+          value: "$(params.disableChunking)"
+        - name: enableFullDocuments
+          value: "$(params.enableFullDocuments)"

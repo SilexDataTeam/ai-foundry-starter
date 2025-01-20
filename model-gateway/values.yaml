@@ -1,0 +1,46 @@
+image:
+  repository: kong/kong-gateway
+  tag: "3.8.0.0"
+
+secretVolumes:
+- kong-cluster-cert
+
+admin:
+  enabled: true
+  http:
+    enabled: true
+  type: ClusterIP
+
+env:
+  role: data_plane
+  database: "off"
+  cluster_mtls: pki
+  cluster_control_plane: ${CLUSTER_SERVER_NAME}:443
+  cluster_server_name: ${CLUSTER_SERVER_NAME}
+  cluster_telemetry_endpoint: ${CLUSTER_TELEMETRY_SERVER_NAME}:443
+  cluster_telemetry_server_name: ${CLUSTER_TELEMETRY_SERVER_NAME}
+  cluster_cert: /etc/secrets/kong-cluster-cert/tls.crt
+  cluster_cert_key: /etc/secrets/kong-cluster-cert/tls.key
+  lua_ssl_trusted_certificate: system
+  konnect_mode: "on"
+  vitals: "off"
+  nginx_worker_processes: "1"
+  upstream_keepalive_max_requests: "100000"
+  nginx_http_keepalive_requests: "100000"
+  proxy_access_log: "off"
+  dns_stale_ttl: "3600"
+
+ingressController:
+  enabled: false
+  installCRDs: false
+
+resources:
+  requests:
+    cpu: 1
+    memory: "2Gi"
+
+proxy:
+  type: ClusterIP
+
+manager:
+  type: ClusterIP

@@ -1,0 +1,29 @@
+{{- if .Values.tempo.enabled }}
+apiVersion: tempo.grafana.com/v1alpha1
+kind: TempoMonolithic
+metadata:
+  name: ai-foundry-tempo
+  namespace: {{ .Values.namespace }}
+spec:
+  ingestion:
+    otlp:
+      grpc:
+        enabled: true
+      http:
+        enabled: true
+  resources:
+    limits:
+      cpu: '2'
+      memory: 2Gi
+  jaegerui:
+    resources:
+      limits:
+        cpu: '2'
+        memory: 2Gi
+    route:
+      enabled: true
+    enabled: true
+  storage:
+    traces:
+      backend: pv
+{{- end }}

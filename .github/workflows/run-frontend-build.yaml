@@ -1,0 +1,31 @@
+name: run-frontend-build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:  
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        working-directory: chat-app
+        run: |
+          npm install
+
+      - name: Run Build
+        working-directory: chat-app
+        run: |
+          npm run build
+          

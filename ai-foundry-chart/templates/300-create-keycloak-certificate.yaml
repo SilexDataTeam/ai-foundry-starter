@@ -1,0 +1,15 @@
+{{- if .Values.keycloak.enabled }}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: keycloak-certificate
+  namespace: {{ .Values.keycloak.namespace }}
+spec:
+  secretName: keycloak-tls-secret
+  issuerRef:
+    name: letsencrypt-dns
+    kind: ClusterIssuer
+  commonName: {{ .Values.keycloak.hostname }}
+  dnsNames:
+    - {{ .Values.keycloak.hostname }}
+{{- end }}

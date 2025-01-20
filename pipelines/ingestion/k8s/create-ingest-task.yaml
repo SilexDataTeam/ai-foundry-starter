@@ -1,0 +1,105 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: ingest-task
+  namespace: ai-foundry
+spec:
+  params:
+    - name: inputDirectory
+      type: string
+      description: "Directory containing documents to ingest (local)"
+    - name: s3Bucket
+      type: string
+      description: "S3 bucket containing PDFs"
+    - name: s3Prefix
+      type: string
+      description: "Prefix in S3 bucket where PDFs are stored"
+    - name: chunkSize
+      type: string
+      description: "Chunk size for splitting documents"
+    - name: chunkOverlap
+      type: string
+      description: "Chunk overlap for splitting documents"
+    - name: collectionName
+      type: string
+      description: "Name of the PGVector collection to store docs"
+    - name: embeddingModelName
+      type: string
+      description: "Name of the embedding model"
+    - name: recreateCollection
+      type: string
+      description: "If true, drop & recreate the collection"
+      default: "false"
+    - name: convertToMarkdown
+      type: string
+      description: "If true, convert PDFs to Markdown"
+    - name: disableChunking
+      type: string
+      description: "If true, disable chunking"
+    - name: enableFullDocuments
+      type: string
+      description: "If true, store full documents in PGVector"
+
+  steps:
+    - name: ingest-docs
+      image: ghcr.io/silexdatateam/ai-foundry-starter/ai-foundry-ingestion:main
+      imagePullPolicy: Always
+      env:
+          # tekton injection of SSL_CERT_DIR breaks httpx, which breaks openai
+        - name: SSL_CERT_DIR
+          value: ""
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: aws-credentials
+              key: aws_access_key_id
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: aws-credentials
+              key: aws_secret_access_key
+        - name: AWS_DEFAULT_REGION
+          value: us-east-1
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: openai-api-key
+              key: token
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: ai-foundry-pg-cluster-superuser
+              key: username
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: ai-foundry-pg-cluster-superuser
+              key: password
+        - name: DB_HOST
+          value: "ai-foundry-pg-cluster-rw.ai-foundry.svc.cluster.local"
+        - name: DB_NAME
+          value: app
+      command: ["python", "ingest.py"]
+      args:
+        - --input-directory
+        - "$(params.inputDirectory)"
+        - --s3-bucket
+        - "$(params.s3Bucket)"
+        - --s3-prefix
+        - "$(params.s3Prefix)"
+        - --chunk-size
+        - "$(params.chunkSize)"
+        - --chunk-overlap
+        - "$(params.chunkOverlap)"
+        - --collection-name
+        - "$(params.collectionName)"
+        - --embedding-model-name
+        - "$(params.embeddingModelName)"
+        - --recreate-collection
+        - "$(params.recreateCollection)"
+        - --convert-to-markdown
+        - "$(params.convertToMarkdown)"
+        - --disable-chunking
+        - "$(params.disableChunking)"
+        - --enable-full-documents
+        - "$(params.enableFullDocuments)"

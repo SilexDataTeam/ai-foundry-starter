@@ -19,7 +19,7 @@ updates:
       - "/backend"
       - "/backend/tests/unit"
     schedule:
-      interval: "daily"
+      interval: "weekly"
     groups:
       python-packages:
         patterns:
@@ -27,7 +27,7 @@ updates:
   - package-ecosystem: "npm"
     directory: "/chat-app"
     schedule:
-      interval: "daily"
+      interval: "weekly"
     groups:
       npm-packages:
         patterns:
@@ -38,7 +38,7 @@ updates:
       - "/chat-app"
       - "/pipelines/ingestion"
     schedule:
-      interval: "daily"
+      interval: "weekly"
     groups:
       docker-images:
         patterns:

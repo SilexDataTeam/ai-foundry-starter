@@ -29,8 +29,8 @@ updates:
     schedule:
       interval: "weekly"
     ignore:
-          - dependency-name: "tailwindcss"
-            update-types: ["version-update:semver-major"]
+      - dependency-name: "tailwindcss"
+        update-types: ["version-update:semver-major"]
     groups:
       npm-packages:
         patterns:

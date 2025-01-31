@@ -28,6 +28,9 @@ updates:
     directory: "/chat-app"
     schedule:
       interval: "weekly"
+    ignore:
+          - dependency-name: "tailwindcss"
+            update-types: ["version-update:semver-major"]
     groups:
       npm-packages:
         patterns:

@@ -12,6 +12,10 @@ This project is a production-ready starter kit for building and deploying AI app
   <img src="https://github.com/silexdatateam/ai-foundry-starter/blob/main/docs/architecture.png?raw=true">
 </p>
 
+<p align="center" width="100%">
+  <img src="https://github.com/silexdatateam/ai-foundry-starter/blob/main/docs/chat.gif?raw=true">
+</p>
+
 ## Key Features
 
 - **LangChain/LangGraph** for flexible AI agent development  

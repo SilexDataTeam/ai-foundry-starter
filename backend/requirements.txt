@@ -1,5 +1,5 @@
 uvicorn==0.34.0
-python-keycloak==5.2.0
+python-keycloak==5.3.0
 PyJWT==2.10.1
 fastapi[standard]==0.115.8
 langchain==0.3.17

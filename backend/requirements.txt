@@ -4,10 +4,10 @@ PyJWT==2.10.1
 fastapi[standard]==0.115.8
 langchain==0.3.18
 langchain-community==0.3.17
-langchain-core==0.3.34
-langchain-openai==0.3.4
+langchain-core==0.3.35
+langchain-openai==0.3.6
 langchain-postgres==0.0.13
 langchain-text-splitters==0.3.6
-opentelemetry-instrumentation-langchain==0.38.4
-traceloop-sdk==0.38.4
-langgraph==0.2.70
+opentelemetry-instrumentation-langchain==0.38.6
+traceloop-sdk==0.38.6
+langgraph==0.2.73

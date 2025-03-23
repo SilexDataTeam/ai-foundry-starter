@@ -18,8 +18,19 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/app/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/options';
+import { Prisma } from '@prisma/client';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
+type ChatWithMessagesAndToolCalls = Prisma.ChatGetPayload<{
+  include: {
+    messages: {
+      include: {
+        tool_calls: true;
+      };
+    };
+  };
+}>;
 
 export async function GET() {
   try {
@@ -31,7 +42,8 @@ export async function GET() {
     const userEmail = session.user.email;
 
     // 2. Find all chats belonging to this user
-    const userChats = await prisma.chat.findMany({
+    //    Use the typed array so TS knows exactly what shape "userChats" has
+    const userChats = (await prisma.chat.findMany({
       where: {
         userId: userEmail,
       },
@@ -40,7 +52,7 @@ export async function GET() {
           include: { tool_calls: true },
         },
       },
-    });
+    })) as ChatWithMessagesAndToolCalls[];
 
     // 3. Transform data into the shape used by ChatApp
     const chatsObj: Record<string, any> = {};

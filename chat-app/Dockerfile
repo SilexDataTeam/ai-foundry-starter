@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi9/nodejs-22:9.5-1741891114 AS base
+FROM registry.access.redhat.com/ubi9/nodejs-22:9.5-1742955796 AS base
 
 # Copy the api server code with owner and permissions
 COPY --chown=1001:0 . /workspace/chat-app

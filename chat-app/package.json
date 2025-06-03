@@ -11,7 +11,7 @@
   "dependencies": {
     "@prisma/client": "^6.8.2",
     "lucide-react": "^0.511.0",
-    "next": "15.3.2",
+    "next": "15.3.3",
     "next-auth": "^4.24.11",
     "prisma": "^6.8.2",
     "react": "^19.1.0",
@@ -24,7 +24,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "15.3.2",
+    "eslint-config-next": "15.3.3",
     "postcss": "^8",
     "tailwindcss": "<4",
     "typescript": "^5"

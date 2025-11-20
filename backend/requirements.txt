@@ -7,7 +7,7 @@ langchain-community==0.3.21
 langchain-core==0.3.54
 langchain-openai==0.3.14
 langchain-postgres==0.0.13
-langchain-text-splitters==0.3.8
+langchain-text-splitters==0.3.9
 opentelemetry-instrumentation-langchain==0.39.2
 traceloop-sdk==0.39.2
 langgraph==0.3.31

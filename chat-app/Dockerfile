@@ -5,11 +5,8 @@ COPY --chown=1001:0 . /workspace/chat-app
 
 WORKDIR /workspace/chat-app
 
-# Install dependencies
+# Install dependencies (postinstall runs prisma generate)
 RUN npm install
-
-# Prisma
-RUN npx prisma generate
 
 # Build the frontend
 RUN npm run build

@@ -4,7 +4,7 @@ PyJWT==2.10.1
 fastapi[standard]==0.115.12
 langchain==0.3.23
 langchain-community==0.3.21
-langchain-core==0.3.54
+langchain-core==0.3.81
 langchain-openai==0.3.14
 langchain-postgres==0.0.13
 langchain-text-splitters==0.3.8

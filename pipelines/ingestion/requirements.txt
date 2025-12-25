@@ -1,8 +1,8 @@
-langchain==0.3.13
-langchain-community==0.3.13
-langchain-core==0.3.28
+langchain==0.3.26
+langchain-community==0.3.27
+langchain-core==0.3.66
 langchain-openai==0.2.14
-langchain-text-splitters==0.3.4
+langchain-text-splitters==0.3.8
 langchain-postgres==0.0.12
 pypdf==6.0.0
 boto3==1.35.90

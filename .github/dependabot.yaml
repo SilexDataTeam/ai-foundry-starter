@@ -18,9 +18,13 @@ updates:
       - "/"
       - "/backend"
       - "/backend/tests/unit"
+      - "/pipelines/ingestion"
     schedule:
       interval: "weekly"
     groups:
+      langchain:
+        patterns:
+          - "langchain*"
       python-packages:
         patterns:
           - "*"

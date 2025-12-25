@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi9/ubi:9.6 AS base
+FROM registry.access.redhat.com/ubi9/ubi:9.7 AS base
 
 # Install python and pip
 RUN yum install -y python3.11 python3.11-pip libpq \

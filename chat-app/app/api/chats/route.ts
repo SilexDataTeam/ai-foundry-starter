@@ -18,19 +18,34 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/app/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/options';
-import { Prisma } from '@prisma/client';
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-type ChatWithMessagesAndToolCalls = Prisma.ChatGetPayload<{
-  include: {
-    messages: {
-      include: {
-        tool_calls: true;
-      };
-    };
-  };
-}>;
+type ChatWithMessagesAndToolCalls = {
+  id: string;
+  title: string;
+  userId: string;
+  createdAt: Date;
+  updatedAt: Date;
+  messages: Array<{
+    id: string;
+    type: string;
+    content: string;
+    name: string | null;
+    tool_call_id: string | null;
+    additional_kwargs: any;
+    chatId: string;
+    createdAt: Date;
+    updatedAt: Date;
+    tool_calls: Array<{
+      id: string;
+      name: string;
+      args: any;
+      messageId: string;
+      createdAt: Date;
+      updatedAt: Date;
+    }>;
+  }>;
+};
 
 export async function GET() {
   try {

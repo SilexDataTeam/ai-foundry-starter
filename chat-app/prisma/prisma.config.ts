@@ -12,7 +12,6 @@ function getDatabaseUrl(): string {
 }
 
 export default defineConfig({
-  earlyAccess: true,
   schema: path.join(__dirname, 'schema.prisma'),
   migrate: {
     async url() {

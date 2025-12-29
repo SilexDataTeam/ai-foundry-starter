@@ -1,7 +1,7 @@
 uvicorn==0.40.0
-python-keycloak==5.8.1
+python-keycloak==6.0.0
 PyJWT==2.10.1
-fastapi[standard]==0.127.0
+fastapi[standard]==0.128.0
 langchain==1.2.0
 langchain-community==0.4.1
 langchain-core==1.2.5

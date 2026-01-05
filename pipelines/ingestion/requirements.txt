@@ -5,8 +5,8 @@ langchain-openai==1.1.6
 langchain-text-splitters==1.1.0
 langchain-postgres==0.0.16
 pypdf==6.5.0
-boto3==1.42.17
+boto3==1.42.21
 markitdown==0.1.4
 nltk==3.9.2
-unstructured[md]==0.18.21
+unstructured[md]==0.18.24
 wikipedia==1.4.0

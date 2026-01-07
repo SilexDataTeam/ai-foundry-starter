@@ -20,12 +20,12 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Install Dependencies
-        working-directory: chat-app
+        working-directory: frontend
         run: |
           npm install
 
       - name: Run Build
-        working-directory: chat-app
+        working-directory: frontend
         run: |
           npm run build
           

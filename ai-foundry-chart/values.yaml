@@ -26,7 +26,7 @@ image:
     repository: ghcr.io/silexdatateam/ai-foundry-starter/ai-foundry-backend
     tag: main
   frontend:
-    repository: ghcr.io/silexdatateam/ai-foundry-starter/ai-foundry-chat-app
+    repository: ghcr.io/silexdatateam/ai-foundry-starter/ai-foundry-frontend
     tag: main
   ingestion:
     repository: ghcr.io/silexdatateam/ai-foundry-starter/ai-foundry-ingestion

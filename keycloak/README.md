@@ -63,4 +63,8 @@ there is a way for the cluster to issue trusted certificates. The AI Foundry Sta
     kubectl get secret keycloak-initial-admin -o jsonpath='{.data.username}' -n keycloak-operator | base64 --decode
     kubectl get secret keycloak-initial-admin -o jsonpath='{.data.password}' -n keycloak-operator | base64 --decode
     ```
-10. Create `myrealm` realm, `ai-foundry-chat-app` application, and `test-user` user. For application set `Valid Redirect URIs` to `http://<front-end hostname & port>/api/auth/callback/keycloak` and `Valid post logout redirect URIs` to `http://<front-end hostname & port>`.
+10. Create `myrealm` realm, `ai-foundry-chat-app` client, and `test-user` user. For the client:
+    - Set `Client authentication` to `Off` (public client for Keycloak.js)
+    - Set `Valid Redirect URIs` to `http://<frontend-hostname>/*` (e.g., `http://localhost:3000/*`)
+    - Set `Valid post logout redirect URIs` to `http://<frontend-hostname>/*`
+    - Set `Web origins` to `http://<frontend-hostname>` (for CORS)

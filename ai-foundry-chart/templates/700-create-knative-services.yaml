@@ -11,14 +11,13 @@ spec:
     spec:
       restartPolicy: Never
       containers:
-        - name: prisma-migrate
-          image: "{{ .Values.image.frontend.repository }}:{{ .Values.image.frontend.tag }}"
+        - name: alembic-migrate
+          image: "{{ .Values.image.backend.repository }}:{{ .Values.image.backend.tag }}"
           imagePullPolicy: {{ .Values.image.default_pull_policy }}
           command: ["/bin/sh", "-c"]
           args:
             - |
-              export DATABASE_URL="postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}"
-              npx prisma migrate deploy
+              cd /app && alembic upgrade head
           env:
             - name: DB_USER
               valueFrom:
@@ -33,7 +32,7 @@ spec:
             - name: DB_HOST
               value: "ai-foundry-pg-cluster-rw.{{ .Values.namespace }}.svc.cluster.local"
             - name: DB_NAME
-              value: "chat-db"
+              value: "app"
 ---
 apiVersion: batch/v1
 kind: Job
@@ -53,7 +52,7 @@ spec:
           command: ["/bin/sh", "-c"]
           args:
             - |
-              psql -c "CREATE DATABASE \"chat-app\""
+              psql -c "CREATE DATABASE \"app\"" || true
           env:
             - name: PGUSER
               valueFrom:
@@ -136,7 +135,7 @@ spec:
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
-  name: ai-foundry-chat-app
+  name: ai-foundry-frontend
   namespace: {{ .Values.namespace }}
 spec:
   template:
@@ -148,48 +147,16 @@ spec:
         - image: "{{ .Values.image.frontend.repository }}:{{ .Values.image.frontend.tag }}"
           imagePullPolicy: {{ .Values.image.default_pull_policy }}
           ports:
-            - containerPort: 3000
+            - containerPort: 80
           env:
-            - name: KEYCLOAK_CLIENT_ID
-              value: "ai-foundry-chat-app"
-            - name: KEYCLOAK_CLIENT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: keycloak-client-secret
-                  key: token
-            - name: KEYCLOAK_ISSUER
-              value: https://{{ .Values.keycloak.hostname }}/realms/{{ .Values.keycloak.realm }}
-            - name: NEXTAUTH_URL
-              value: https://{{ .Values.frontend_hostname }}
-            - name: NEXTAUTH_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: nextauth-secret
-                  key: token
-            - name: NODE_TLS_REJECT_UNAUTHORIZED
-              value: "0"
-            - name: SERVICE_URL
-              value: https://{{ .Values.backend_hostname }}/
-            - name: DB_USER
-              valueFrom:
-                secretKeyRef:
-                  name: ai-foundry-pg-cluster-superuser
-                  key: username
-            - name: DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: ai-foundry-pg-cluster-superuser
-                  key: password
-            - name: DB_HOST
-              value: "ai-foundry-pg-cluster-rw.{{ .Values.namespace }}.svc.cluster.local"
-            - name: DB_NAME
-              value: chat-db
-          volumeMounts:
-            - name: chat-app-data
-              mountPath: /workspace/chat-app/data/
-      volumes:
-        - name: chat-app-data
-          emptyDir: {}
+            - name: VITE_KEYCLOAK_URL
+              value: https://{{ .Values.keycloak.hostname }}
+            - name: VITE_KEYCLOAK_REALM
+              value: {{ .Values.keycloak.realm }}
+            - name: VITE_KEYCLOAK_CLIENT_ID
+              value: {{ .Values.keycloak_client_id }}
+            - name: VITE_API_BASE_URL
+              value: https://{{ .Values.backend_hostname }}
 ---
 apiVersion: serving.knative.dev/v1beta1
 kind: DomainMapping
@@ -198,7 +165,7 @@ metadata:
  namespace: {{ .Values.namespace }}
 spec:
  ref:
-   name: ai-foundry-chat-app
+   name: ai-foundry-frontend
    kind: Service
    apiVersion: serving.knative.dev/v1
 ---

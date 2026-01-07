@@ -12,5 +12,6 @@ opentelemetry-instrumentation-langchain==0.50.1
 traceloop-sdk==0.50.1
 langgraph==1.0.5
 sqlalchemy[asyncio]==2.0.45
-asyncpg==0.30.0alembic==1.17.2
+asyncpg==0.30.0
+alembic==1.17.2
 psycopg2-binary==2.9.10

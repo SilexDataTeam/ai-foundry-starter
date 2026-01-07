@@ -2,12 +2,15 @@ uvicorn==0.40.0
 python-keycloak==6.0.0
 PyJWT==2.10.1
 fastapi[standard]==0.128.0
-langchain==1.2.0
+langchain==1.2.1
 langchain-community==0.4.1
 langchain-core==1.2.6
-langchain-openai==1.1.6
+langchain-openai==1.1.7
 langchain-postgres==0.0.16
 langchain-text-splitters==1.1.0
 opentelemetry-instrumentation-langchain==0.50.1
 traceloop-sdk==0.50.1
 langgraph==1.0.5
+sqlalchemy[asyncio]==2.0.45
+asyncpg==0.30.0alembic==1.17.2
+psycopg2-binary==2.9.10

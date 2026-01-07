@@ -25,6 +25,9 @@ from fastapi.security import OAuth2PasswordBearer
 from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
 
 from .routes.chat_title import router as chat_title_router
+from .routes.chats import router as chats_router
+from .routes.chats import set_verify_token_dependency
+from .routes.config import router as config_router
 from .routes.events import router as events_router
 from .routes.feedback import router as feedback_router
 from .telemetry import setup_telemetry
@@ -127,7 +130,8 @@ if not DISABLE_AUTH:
                 status_code=500, detail=f"Failed to fetch public key: {str(e)}"
             )
 
-    async def verify_token(token: str = Depends(oauth2_scheme)) -> dict[str, Any]:
+    async def verify_token_raw(token: str) -> dict[str, Any]:
+        """Verify token without FastAPI Depends - for use in routes that need payload."""
         try:
             # First decode without verification to inspect claims
             unverified = jwt.decode(token, options={"verify_signature": False})
@@ -189,6 +193,13 @@ if not DISABLE_AUTH:
                 headers={"WWW-Authenticate": "Bearer"},
             )
 
+    async def verify_token(token: str = Depends(oauth2_scheme)) -> dict[str, Any]:
+        """Verify token with FastAPI Depends - for use as route dependency."""
+        return await verify_token_raw(token)
+
+    # Set the verify token dependency for chats routes
+    set_verify_token_dependency(verify_token_raw)
+
 
 app = FastAPI(
     title="AI Foundry Sandbox",
@@ -201,7 +212,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=CORS_ALLOWED_ORIGINS,
     allow_credentials=True,
-    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_methods=["GET", "POST", "DELETE", "OPTIONS"],
     allow_headers=["Authorization", "Content-Type", "Accept"],
     expose_headers=["Authorization", "Content-Type"],
 )
@@ -211,12 +222,49 @@ if not DISABLE_TELEMETRY:
     setup_telemetry(service_name="AI Foundry Sandbox")
 
 # Include route modules with or without authentication
+# These routes use the standard dependency pattern
 routes = [events_router, feedback_router, chat_title_router]
 for route in routes:
     if not DISABLE_AUTH:
         app.include_router(route, dependencies=[Depends(verify_token)])
     else:
         app.include_router(route)
+
+# Chats routes handle their own auth internally (to access token payload)
+app.include_router(chats_router)
+
+# Config route doesn't require authentication
+app.include_router(config_router)
+
+# Static file serving for frontend (when SERVE_FRONTEND is enabled)
+SERVE_FRONTEND = os.getenv("SERVE_FRONTEND", "false").lower() == "true"
+STATIC_FILES_DIR = os.getenv("STATIC_FILES_DIR", "./static")
+
+if SERVE_FRONTEND:
+    from pathlib import Path
+
+    from fastapi.responses import FileResponse
+    from fastapi.staticfiles import StaticFiles
+
+    static_path = Path(STATIC_FILES_DIR)
+    if static_path.exists():
+        logger.info(f"Serving frontend from {static_path}")
+
+        # Mount assets directory for JS/CSS/images
+        assets_path = static_path / "assets"
+        if assets_path.exists():
+            app.mount("/assets", StaticFiles(directory=str(assets_path)), name="assets")
+
+        # Serve index.html for SPA routing (catch-all route)
+        @app.get("/{full_path:path}")
+        async def serve_spa(full_path: str):
+            """Serve the SPA frontend, falling back to index.html for client-side routing."""
+            file_path = static_path / full_path
+            if file_path.exists() and file_path.is_file():
+                return FileResponse(file_path)
+            return FileResponse(static_path / "index.html")
+    else:
+        logger.warning(f"Static files directory not found: {static_path}")
 
 if __name__ == "__main__":
     import uvicorn

@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --primary: #1f2937;
+    --primary-dark: #111827;
+    --secondary: #f9fafb;
+    --accent: #0ea5e9;
+    --accent-dark: #0284c7;
+    --text-dark: #111827;
+    --text-light: #6b7280;
+    --font-sans: 'Inter', sans-serif;
+    --background: #ffffff;
+    --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background: #0a0a0a;
+        --foreground: #ededed;
+    }
+}
+
+body {
+    font-family: var(--font-sans);
+    background-color: var(--secondary);
+    color: var(--text-dark);
+}
+
+.chat-bubble-ai {
+    background-color: #f3f4f6;
+    color: var(--text-dark);
+    border-radius: 12px;
+}
+
+.chat-bubble-human {
+    background-color: var(--primary);
+    color: white;
+    border-radius: 12px;
+}
+
+@media (max-width: 768px) {
+    .chat-area {
+        padding: 1rem;
+    }
+}

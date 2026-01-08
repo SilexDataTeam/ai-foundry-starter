@@ -25,9 +25,10 @@ This project is a production-ready starter kit for building and deploying AI app
 - Multiple **RAG patterns** implemented (basic, advanced, agentic approaches)
 
 ### Frontend
-- **Next.js** web application with real-time chat interface  
-- **Server-Sent Events (SSE)** for streaming AI responses  
-- Responsive design using **Tailwind CSS**  
+- **Vite + React** web application with real-time chat interface
+- **Server-Sent Events (SSE)** for streaming AI responses
+- Responsive design using **Tailwind CSS**
+- **Keycloak.js** for authentication
 - **Thumbs up/down** feedback system for AI responses
 
 ### Backend
@@ -56,7 +57,7 @@ This project is a production-ready starter kit for building and deploying AI app
 
 The system consists of several key components:
 
-1. **Chat Frontend (chat-app/)**  
+1. **Chat Frontend (frontend/)**
 2. **Backend API (backend/)**  
 3. **Kong AI Gateway (model-gateway/)**  
 4. **PostgreSQL Database + PGVector**  

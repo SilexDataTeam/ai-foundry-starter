@@ -16,7 +16,7 @@ import logging
 import os
 from typing import Annotated, Literal, Sequence, TypedDict
 
-from langchain.tools.retriever import create_retriever_tool
+from langchain_core.tools import tool
 from langchain_community.tools import TavilySearchResults
 from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
@@ -92,13 +92,15 @@ llm = ChatOpenAI(
 
 retriever = vector_store.as_retriever()
 
-retriever_tool = create_retriever_tool(
-    retriever,
-    name="retrieve_tennessee_documents",
-    description="Search and return information about Tennessee. This tool does not return information about other States.",
-)
 
-tools = [retriever_tool]
+@tool
+def retrieve_tennessee_documents(query: str) -> str:
+    """Search and return information about Tennessee. This tool does not return information about other States."""
+    docs = retriever.invoke(query)
+    return "\n\n".join([doc.page_content for doc in docs])
+
+
+tools = [retrieve_tennessee_documents]
 
 tavily_search_tool = TavilySearchResults(
     description="Only use this search tool when other tools cannot provide the answer."

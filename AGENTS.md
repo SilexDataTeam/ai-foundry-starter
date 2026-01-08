@@ -4,19 +4,17 @@ This file provides guidance to AI coding assistants when working with code in th
 
 ## Project Overview
 
-Silex AI Foundry Starter is a production-ready monorepo for building AI applications with LangChain/LangGraph. It includes a Next.js chat frontend, FastAPI backend with multiple RAG patterns, Kong API gateway for multi-model LLM support, and Kubernetes/OpenShift deployment infrastructure.
+Silex AI Foundry Starter is a production-ready monorepo for building AI applications with LangChain/LangGraph. It includes a Vite/React chat frontend, FastAPI backend with multiple RAG patterns, Kong API gateway for multi-model LLM support, and Kubernetes/OpenShift deployment infrastructure.
 
 ## Common Commands
 
-### Frontend (chat-app/)
+### Frontend (frontend/)
 ```bash
-cd chat-app
+cd frontend
 npm install              # Install dependencies
-npm run dev              # Start dev server with Turbopack (localhost:3000)
+npm run dev              # Start dev server (localhost:3000)
 npm run build            # Production build
 npm run lint             # Run ESLint
-npx prisma migrate dev   # Run database migrations
-npx prisma generate      # Generate Prisma client
 ```
 
 ### Backend (backend/)
@@ -43,13 +41,13 @@ python ingest.py  # Run document ingestion
 cd backend && make podman-build && make podman-run
 
 # Frontend
-cd chat-app && make podman-build && make podman-run
+cd frontend && make podman-build && make podman-run
 ```
 
 ## Architecture
 
 ```
-├── chat-app/           # Next.js 15 frontend (React 19, Tailwind, Prisma, NextAuth)
+├── frontend/           # Vite + React frontend (TypeScript, Tailwind, Keycloak.js)
 ├── backend/            # FastAPI backend with LangChain/LangGraph
 │   ├── routes/         # API endpoints (events, feedback, chat_title)
 │   ├── patterns/       # RAG implementations (selected via USE_CHAIN env var)
@@ -77,8 +75,10 @@ cd chat-app && make podman-build && make podman-run
 - `COLLECTION_NAME` - Vector store collection name
 
 **Frontend:**
-- `DATABASE_URL` - PostgreSQL connection for Prisma
-- `NEXTAUTH_URL`, `NEXTAUTH_SECRET` - NextAuth configuration
+- `VITE_KEYCLOAK_URL` - Keycloak server URL
+- `VITE_KEYCLOAK_REALM` - Keycloak realm name
+- `VITE_KEYCLOAK_CLIENT_ID` - Keycloak client ID
+- `VITE_API_BASE_URL` - Backend API URL (optional, defaults to same origin)
 
 ## Data Flow
 

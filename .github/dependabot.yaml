@@ -29,7 +29,7 @@ updates:
         patterns:
           - "*"
   - package-ecosystem: "npm"
-    directory: "/chat-app"
+    directory: "/frontend"
     schedule:
       interval: "weekly"
     ignore:
@@ -42,7 +42,7 @@ updates:
   - package-ecosystem: "docker"
     directories:
       - "/backend"
-      - "/chat-app"
+      - "/frontend"
       - "/pipelines/ingestion"
     schedule:
       interval: "weekly"

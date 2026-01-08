@@ -1,7 +1,7 @@
-langchain==1.2.0
+langchain==1.2.2
 langchain-community==0.4.1
 langchain-core==1.2.6
-langchain-openai==1.1.6
+langchain-openai==1.1.7
 langchain-text-splitters==1.1.0
 langchain-postgres==0.0.16
 pypdf==6.5.0

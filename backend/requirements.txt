@@ -2,9 +2,9 @@ uvicorn==0.40.0
 python-keycloak==7.0.1
 PyJWT==2.10.1
 fastapi[standard]==0.128.0
-langchain==1.2.2
+langchain==1.2.3
 langchain-community==0.4.1
-langchain-core==1.2.6
+langchain-core==1.2.7
 langchain-openai==1.1.7
 langchain-postgres==0.0.16
 langchain-text-splitters==1.1.0

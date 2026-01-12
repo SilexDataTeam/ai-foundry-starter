@@ -1,5 +1,5 @@
 uvicorn==0.40.0
-python-keycloak==7.0.1
+python-keycloak==7.0.2
 PyJWT==2.10.1
 fastapi[standard]==0.128.0
 langchain==1.2.2
@@ -13,5 +13,5 @@ traceloop-sdk==0.50.1
 langgraph==1.0.5
 sqlalchemy[asyncio]==2.0.45
 asyncpg==0.31.0
-alembic==1.17.2
+alembic==1.18.0
 psycopg2-binary==2.9.11

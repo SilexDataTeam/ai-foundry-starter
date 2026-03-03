@@ -4,7 +4,7 @@ langchain-core==1.2.16
 langchain-openai==1.1.10
 langchain-text-splitters==1.1.1
 langchain-postgres==0.0.17
-pypdf==6.7.4
+pypdf==6.7.5
 boto3==1.42.54
 markitdown==0.1.5
 nltk==3.9.3

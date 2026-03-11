@@ -10,7 +10,7 @@ langchain-postgres==0.0.17
 langchain-text-splitters==1.1.1
 opentelemetry-instrumentation-langchain==0.52.4
 traceloop-sdk==0.52.4
-langgraph==1.0.9
+langgraph==1.0.10rc1
 sqlalchemy[asyncio]==2.0.46
 asyncpg==0.31.0
 alembic==1.18.4

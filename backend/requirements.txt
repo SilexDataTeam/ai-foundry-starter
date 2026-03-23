@@ -2,10 +2,10 @@ uvicorn==0.41.0
 python-keycloak==7.1.1
 PyJWT==2.11.0
 fastapi[standard]==0.131.0
-langchain==1.2.10
+langchain==1.2.13
 langchain-community==0.4.1
-langchain-core==1.2.16
-langchain-openai==1.1.10
+langchain-core==1.2.20
+langchain-openai==1.1.11
 langchain-postgres==0.0.17
 langchain-text-splitters==1.1.1
 opentelemetry-instrumentation-langchain==0.52.4

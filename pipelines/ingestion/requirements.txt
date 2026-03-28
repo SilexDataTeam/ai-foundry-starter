@@ -1,6 +1,6 @@
 langchain==1.2.10
 langchain-community==0.4.1
-langchain-core==1.2.16
+langchain-core==1.2.22
 langchain-openai==1.1.10
 langchain-text-splitters==1.1.1
 langchain-postgres==0.0.17
